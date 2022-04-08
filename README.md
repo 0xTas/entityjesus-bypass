@@ -8,7 +8,8 @@ After playing with the changes for some time, I realized that the rubberbanding 
 Since this isn't a built-in feature on any of the clients that I use, I wrote a python script to do it for me.
 
 This script generates rapid keypresses of a single key only while Minecraft is detected as your active window.
-Setting your client's Jesus toggle hotkey to the same key (by default: 'k') will cause EntityJesus to toggle automatically, allowing you to ride your horse over water with roughly 90% less rubberbanding than any current configs for Future and Lambda can accomplish.
+Setting your client's Jesus toggle hotkey to the same key (by default: 'k') will cause EntityJesus to toggle automatically, allowing you to ride your horse over water with around 97% less rubberbanding on Lambda, and at least 50% less rubberbanding with Future.
+
 The script automatically pauses its keyspamming when Minecraft is not the active window, and also whenever you open the chat, because that was annoying.
 Be aware that if you open your chat with some key other than 't','/', or ';', you will need to add this to the script to compensate.
 
