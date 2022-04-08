@@ -181,7 +181,7 @@ try:
         elif (keyboard.is_pressed('enter') or keyboard.is_pressed('escape')) and switch: # Resume auto-toggle once we exit from chat.
             print('Bypass resumed.') if not isPaused else stfu()
             switch = False
-        elif keyboard.is_pressed('grave'):
+        elif keyboard.is_pressed('grave'): # Ability to manually pause the script for arbitrary amounts of time.
             if isPaused:
                 isPaused = False
                 print('Bypass resumed.')
@@ -190,7 +190,7 @@ try:
                 isPaused = True
                 print('Bypass paused.')
                 sleep(0.5)
-        elif keyboard.is_pressed('y') or keyboard.is_pressed('right_shift'):
+        elif keyboard.is_pressed('y') or keyboard.is_pressed('right_shift'): # Stop spamming when opening HUDs for commonly-used clients.
             if switch:
                 switch = False
                 print('Bypass resumed.') if not isPaused else stfu()
@@ -199,7 +199,7 @@ try:
                 switch = True
                 print('Bypass paused.') if not isPaused else stfu()
                 sleep(0.5)
-        schedule.run_pending()
+        schedule.run_pending() # Run our jesus() function.
         sleep(0.001)
 except KeyboardInterrupt: # Control-C to terminate the script.
     quit()
