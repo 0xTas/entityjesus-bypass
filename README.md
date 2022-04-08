@@ -30,7 +30,7 @@ On the first run, the script may install a few Python modules, these are:
 
 If this process doesn't work, please ensure that 'pip3' is in your path, or install the modules manually.
 
-Afterwards, this script will not install any additional packages, update itself, or make any network connections.
+Afterwards, this script **will not** install any additional packages, update itself, or make any network connections.
 
 ### Troubleshooting
 
