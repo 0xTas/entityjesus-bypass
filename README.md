@@ -36,10 +36,15 @@ If this process doesn't work, please ensure that 'pip3' is in your path, or inst
 
 Afterwards, this script **will not** install any additional packages, update itself, or make any network connections.
 
+### Usage
+
 In game, you'll want to set your Client's Jesus module to solid mode, and then assign the proper hotkey to it for the script to toggle ('k' is the default).
 If you're using Future client, strict and solid mode both work, but neither are quite perfect like Lambda's Solid Jesus is.
-You can play with the timings in the script to maybe improve the behavior. 
+You can play with the timings in the script to maybe improve the behavior. The line to change is "schedule.every(0.32).seconds.do(jesus)".
 The default 0.32 works perfectly for Lambda, while Future likes a slightly smaller timing like 0.29.
+
+The script will automatically stop spamming the hotkey if you open your chat, and resume once you close it again.
+You can also manually pause and resume the script using a hotkey without needing to alt-tab. By default, this is the grave key: '~'.
 
 
 ### Troubleshooting
