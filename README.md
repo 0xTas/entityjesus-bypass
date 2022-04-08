@@ -24,9 +24,9 @@ If you don't have python 3 set up in your path, [fix that first.](https://datato
 Then you can run this script either by click-opening it, or via a console with 'python jesus.py'.
 
 On the first run, the script may install a few Python modules, these are:
-'pygetwindow' - to check the actively focused window so it doesn't spam the hotkey while you are alt-tabbed doing other things.
-'schedule' - to run our scheduled keypress events while Minecraft is detected as your active window.
-'keyboard' - to detect other times when we need to pause keyspamming (when you open/close the chat).
+1. 'pygetwindow' - to check the actively focused window so it doesn't spam the hotkey while you are alt-tabbed doing other things.
+2. 'schedule' - to run our scheduled keypress events while Minecraft is detected as your active window.
+3. 'keyboard' - to detect other times when we need to pause keyspamming (when you open/close the chat).
 If this process doesn't work, please ensure that 'pip3' is in your path, or install the modules manually.
 
 Afterwards, this script will not install any additional packages, update itself, or make any network connections.
