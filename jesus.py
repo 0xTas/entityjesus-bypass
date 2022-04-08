@@ -177,27 +177,27 @@ try:
     while True:
         if (keyboard.is_pressed('t') or keyboard.is_pressed('/') or keyboard.is_pressed(';')) and not switch: # Prevent the script from continuously spamming when we open chat menus.
             switch = True # This way we can still type.
-            print('Paused Bypass.') if not isPaused else stfu()
+            print('Bypass paused.') if not isPaused else stfu()
         elif (keyboard.is_pressed('enter') or keyboard.is_pressed('escape')) and switch: # Resume auto-toggle once we exit from chat.
-            print('Resumed Bypass.') if not isPaused else stfu()
+            print('Bypass resumed.') if not isPaused else stfu()
             switch = False
         elif keyboard.is_pressed('grave'):
             if isPaused:
                 isPaused = False
-                print('Resumed Bypass.')
+                print('Bypass resumed.')
                 sleep(0.5)
             elif not isPaused:
                 isPaused = True
-                print('Paused Bypass.')
+                print('Bypass paused.')
                 sleep(0.5)
         elif keyboard.is_pressed('y') or keyboard.is_pressed('right_shift'):
             if switch:
                 switch = False
-                print('Bypass resumed.')
+                print('Bypass resumed.') if not isPaused else stfu()
                 sleep(0.5)
             elif not switch:
                 switch = True
-                print('Bypass paused.')
+                print('Bypass paused.') if not isPaused else stfu()
                 sleep(0.5)
         schedule.run_pending()
         sleep(0.001)
