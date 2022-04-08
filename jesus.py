@@ -190,7 +190,7 @@ try:
                 isPaused = True
                 print('Paused Bypass.')
                 sleep(0.5)
-        elif keyboard.is_pressed('y') or keyboard.is_pressed('right_shift):
+        elif keyboard.is_pressed('y') or keyboard.is_pressed('right_shift'):
             if switch:
                 switch = False
                 print('Bypass resumed.')
