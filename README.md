@@ -12,8 +12,12 @@ Setting your client's Jesus toggle hotkey to the same key (by default: 'k') will
 The script automatically pauses its keyspamming when Minecraft is not the active window, and also whenever you open the chat, because that was annoying.
 Be aware that if you open your chat with some key other than 't','/', or ';', you will need to add this to the script to compensate.
 
+I recommend using the free Lambda client's Jesus module with this bypass for the best experience.
+It works okay on Future, but I still rubberband or get kicked off my horse occasionally, whereas that happens almost never with Lambda.
 The bypass may work with additional clients, but I only tested it with Future and Lambda.
 I have a feeling that this wouldn't be enough to fix Impact's garbage, so I didn't even test it. Let me know if I'm wrong.
+
+I would have made this into a Lambda plugin but I don't know how to write Java yet and I was too lazy to learn just for this.
 
 ### Setup
 
@@ -31,6 +35,12 @@ On the first run, the script may install a few Python modules, these are:
 If this process doesn't work, please ensure that 'pip3' is in your path, or install the modules manually.
 
 Afterwards, this script **will not** install any additional packages, update itself, or make any network connections.
+
+In game, you'll want to set your Client's Jesus module to solid mode, and then assign the proper hotkey to it for the script to toggle ('k' is the default).
+If you're using Future client, strict and solid mode both work, but neither are quite perfect like Lambda's Solid Jesus is.
+You can play with the timings in the script to maybe improve the behavior. 
+The default 0.32 works perfectly for Lambda, while Future likes a slightly smaller timing like 0.29.
+
 
 ### Troubleshooting
 
