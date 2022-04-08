@@ -190,6 +190,15 @@ try:
                 isPaused = True
                 print('Paused Bypass.')
                 sleep(0.5)
+        elif keyboard.is_pressed('y') or keyboard.is_pressed('right_shift):
+            if switch:
+                switch = False
+                print('Bypass resumed.')
+                sleep(0.5)
+            elif not switch:
+                switch = True
+                print('Bypass paused.')
+                sleep(0.5)
         schedule.run_pending()
         sleep(0.001)
 except KeyboardInterrupt: # Control-C to terminate the script.
