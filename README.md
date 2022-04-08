@@ -12,7 +12,7 @@ Setting your client's Jesus toggle hotkey to the same key (by default: 'k') will
 The script automatically pauses its keyspamming when Minecraft is not the active window, and also whenever you open the chat, because that was annoying.
 Be aware that if you open your chat with some key other than 't','/', or ';', you will need to add this to the script to compensate.
 
-I recommend using the free Lambda client's Jesus module with this bypass for the best experience.
+I recommend using the free [Lambda client's](https://github.com/lambda-client/lambda) Jesus module with this bypass for the best experience.
 It works okay on Future, but I still rubberband or get kicked off my horse occasionally, whereas that happens almost never with Lambda.
 The bypass may work with additional clients, but I only tested it with Future and Lambda.
 I have a feeling that this wouldn't be enough to fix Impact's garbage, so I didn't even test it. Let me know if I'm wrong.
