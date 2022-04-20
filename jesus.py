@@ -168,9 +168,9 @@ def die(code):
 
 
 def isFocused():
-    try:
+    try:            # If using a different set-up, your window title may differ from these 2!
         if gw.getActiveWindow().title == 'Minecraft 1.12.2' or 'Lambda' in gw.getActiveWindow().title:
-            return True
+            return True # If needed, change the above line to match your MC window title so that this function will return true when active.
         else:
             return False
     except AttributeError:
@@ -183,8 +183,8 @@ def jesus():
     try:
         print(gw.getActiveWindow().title) if debug else stfu() # Use debug mode to troubleshoot by checking that your window title matches the following logic.
 
-        if not switch and not isPaused: # MIGHT NEED TO CHANGE BELOW THIS LINE IF YOUR MINECRAFT WINDOW HAS A DIFFERENT TITLE
-            if gw.getActiveWindow().title == 'Minecraft 1.12.2' or 'Lambda' in  gw.getActiveWindow().title: # If using a different set-up, your window title may differ from these 2!
+        if not switch and not isPaused:
+            if isFocused(): 
                 PressKey(VKEY_K)
                 sleep(0.003)
                 ReleaseKey(VKEY_K)
