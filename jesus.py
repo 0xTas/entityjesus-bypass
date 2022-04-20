@@ -1,15 +1,26 @@
 ##########################################
-#       2b2t EntityJesus Bypass          #
+#   2b2t EntityJesus Bypass/Workaround   #
 #                                        #
 #           Author: 0x_Tas               #
 #          Discord: Tas#5187             #
 #            License: MIT                #
 ##########################################
 
+##########################################
+#  This script generates quick repeated  #
+#  keypresses when Minecraft is set as   #
+#         your active window.            #
+#                                        #
+#  It is basically just a fancy macro.   #
+##########################################
+
+
+# This script was written for Python 3.10.2, but should be compatible with all recent versions of Python 3.
 import os
 from time import sleep
 if os.name != 'nt':
     print('Sorry, the solution used to generate keyboard events for this bypass only works on Windows.\nConsider researching an alternate solution for generating low-latency keypresses on Linux/Mac.')
+    raise SystemExit(1)
 try:
     import pygetwindow as gw
 except ImportError:
@@ -18,10 +29,10 @@ except ImportError:
         subprocess.call(['pip3','install','pygetwindow'])
         os.system('python jesus.py')
     except KeyboardInterrupt:
-        quit()
+        raise SystemExit(1)
     except Exception as err:
         print(f'Could not import pygetwindow module.\nError: {err}\nExiting..')
-        quit()
+        raise SystemExit(1)
 try:
     import keyboard
 except ImportError:
@@ -30,10 +41,10 @@ except ImportError:
         subprocess.call(['pip3','install','keyboard'])
         os.system('python jesus.py')
     except KeyboardInterrupt:
-        quit()
+        raise SystemExit(1)
     except Exception as err:
         print(f'Could not import Keyboard module. \nError: {err}\nExiting..')
-        quit()
+        raise SystemExit(1)
 try:
     import schedule
 except ImportError:
@@ -42,20 +53,21 @@ except ImportError:
         subprocess.call(['pip3','install','schedule'])
         os.system('python jesus.py')
     except KeyboardInterrupt:
-        quit()
+        raise SystemExit(1)
     except Exception as err:
         print(f'Could not import schedule module.\nError: {err}\nExiting..')
-        quit()
+        raise SystemExit(1)
 from sys import argv as args
 import ctypes
 from ctypes import wintypes
 
 
-########################################################################################
-#                                                                                      #
-#  From: https://stackoverflow.com/questions/13564851/how-to-generate-keyboard-events  #
-#                                                                                      #
-########################################################################################
+#################################################################################################
+#                                                                                               #
+#  Borrowed From: https://stackoverflow.com/questions/13564851/how-to-generate-keyboard-events  #
+#                   Using Ctypes because the Keyboard module alone is too slow.                 #
+#                                                                                               #
+#################################################################################################
 user32 = ctypes.WinDLL('user32', use_last_error=True)
 KEYEVENTF_EXTENDEDKEY = 0x0001
 KEYEVENTF_KEYUP       = 0x0002
@@ -137,37 +149,56 @@ def ReleaseKey(hexKeyCode):
 #                                                           #
 #############################################################
 
-
 os.system('cls')
+
 switch = False
 isPaused = False
 debug = False
+
+# Parse args for optional debug mode.
 for arg in args:
     if arg == '-d' or arg.lower() == '--debug':
         debug = True
-    
-def stfu():
+
+
+def stfu(): # Enables "do this if that else pass" if statements on one line, since 'pass' won't work in these single-line statements for some reason but we also can't eschew 'else' so...
     pass
+def die(code):
+    raise SystemExit(code)
+
+
+def isFocused():
+    try:
+        if gw.getActiveWindow().title == 'Minecraft 1.12.2' or 'Lambda' in gw.getActiveWindow().title:
+            return True
+        else:
+            return False
+    except AttributeError:
+        stfu() # Ignore harmless AttributeError from switching active windows.
+        return False
+
+
 def jesus():
     global switch
     try:
         print(gw.getActiveWindow().title) if debug else stfu() # Use debug mode to troubleshoot by checking that your window title matches the following logic.
-        if not switch and not isPaused: # MIGHT NEED TO CHANGE THIS BELOW LINE IF YOUR MINECRAFT WINDOW HAS A DIFFERENT TITLE
-            if gw.getActiveWindow().title == 'Minecraft 1.12.2' or 'Lambda' in  gw.getActiveWindow().title: # If using a different set-up, your window title may differ from these 2.
+
+        if not switch and not isPaused: # MIGHT NEED TO CHANGE BELOW THIS LINE IF YOUR MINECRAFT WINDOW HAS A DIFFERENT TITLE
+            if gw.getActiveWindow().title == 'Minecraft 1.12.2' or 'Lambda' in  gw.getActiveWindow().title: # If using a different set-up, your window title may differ from these 2!
                 PressKey(VKEY_K)
                 sleep(0.003)
                 ReleaseKey(VKEY_K)
             else:
                 return
-    except AttributeError as arr:
-        stfu() # Ignore harmless AttributeError from switching active windows.
+    except AttributeError:
+        stfu()            # Ignore harmless AttributeError from switching active windows.
     except Exception as err:
         print(f'Errored: {err}.') # Report unhandled errors.
         try:
             ReleaseKey(VKEY_K)
-            quit()
+            die(1)
         except:
-            quit()
+            die(1)
 
 
 schedule.every(0.32).seconds.do(jesus) # Main interval for our toggle speed. You may need or wish to adjust this number slightly or depending on your Client.
@@ -175,31 +206,34 @@ print('Running EntityJesus Bypass..')
 
 try:
     while True:
-        if (keyboard.is_pressed('t') or keyboard.is_pressed('/') or keyboard.is_pressed(';')) and not switch: # Prevent the script from continuously spamming when we open chat menus.
-            switch = True # This way we can still type.
-            print('Bypass paused.') if not isPaused else stfu()
-        elif (keyboard.is_pressed('enter') or keyboard.is_pressed('escape')) and switch: # Resume auto-toggle once we exit from chat.
-            print('Bypass resumed.') if not isPaused else stfu()
-            switch = False
-        elif keyboard.is_pressed('grave'): # Ability to manually pause the script for arbitrary amounts of time.
-            if isPaused:
-                isPaused = False
-                print('Bypass resumed.')
-                sleep(0.5)
-            elif not isPaused:
-                isPaused = True
-                print('Bypass paused.')
-                sleep(0.5)
-        elif keyboard.is_pressed('y') or keyboard.is_pressed('right_shift'): # Stop spamming when opening HUDs for commonly-used clients.
-            if switch:
+        if isFocused():
+
+            # Prevent the script from continuously spamming when we open chat menus or client menus.
+            if (keyboard.is_pressed('t') or keyboard.is_pressed('/') or keyboard.is_pressed(';') or keyboard.is_pressed('y') or keyboard.is_pressed('right_shift')) and not switch: 
+                
+                # This way we can still type. Hotkey macro is disabled while switch boolean is True.
+                switch = True 
+                print('Paused Bypass.') if not isPaused else stfu()
+                sleep(.420) # Brief sleep to prevent script from racing between paused/resumed.
+
+            # Resume auto-toggle once we exit from chat or client-menu. Right-shift is missing here because it doesn't also close the client menu, at least for Future.
+            elif (keyboard.is_pressed('enter') or keyboard.is_pressed('escape') or keyboard.is_pressed('y')) and switch: 
+                print('Resumed Bypass.') if not isPaused else stfu()
                 switch = False
-                print('Bypass resumed.') if not isPaused else stfu()
-                sleep(0.5)
-            elif not switch:
-                switch = True
-                print('Bypass paused.') if not isPaused else stfu()
-                sleep(0.5)
-        schedule.run_pending() # Run our jesus() function.
+                sleep(.420)
+
+            elif keyboard.is_pressed('grave'): # Manual pause-mode toggle. You can change the pause hotkey here, default 'grave' is the '~' key.
+                if isPaused:
+                    isPaused = False
+                    print('Resumed Bypass.')
+                    sleep(.420)
+
+                elif not isPaused:
+                    isPaused = True
+                    print('Paused Bypass.')
+                    sleep(.420)
+
+        schedule.run_pending()
         sleep(0.001)
 except KeyboardInterrupt: # Control-C to terminate the script.
-    quit()
+    die(0)
