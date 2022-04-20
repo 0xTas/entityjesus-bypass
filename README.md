@@ -52,4 +52,4 @@ You can also manually pause and resume the script using a hotkey without needing
 
 If the script doesn't work, the most likely issue is the title of your Minecraft window, especially if you aren't using Lambda or Forge with Future.
 Run the script in debug mode 'python jesus.py -d' or 'python jesus.py --debug' to see the title of your active window.
-Then you can change the if statement logic in the Jesus function to match your Minecraft window title.
+Then you can change the if statement logic in the "isFocused" function to match your Minecraft window title.
