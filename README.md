@@ -33,6 +33,9 @@ On the first run, the script may install a few Python modules, these are:
 2. ['schedule'](https://schedule.readthedocs.io/en/stable/) - to run our scheduled keypress events while Minecraft is detected as your active window.
 3. ['keyboard'](https://pypi.org/project/keyboard/) - to detect other times when we need to pause keyspamming (like when you open/close the chat).
 
+It is recommended to install these dependencies manually with the included 'requirements.txt' file.
+To do this, make sure pip/pip3 is installed and type 'pip3 install -r requirements.txt'.
+
 If this process doesn't work, please ensure that 'pip3' is in your path, or install the modules manually.
 
 Afterwards, this script **will not** install any additional packages, update itself, or make any network connections.
@@ -50,6 +53,6 @@ You can also manually pause and resume the script using a hotkey without needing
 
 ### Troubleshooting
 
-If the script doesn't work, the most likely issue is the title of your Minecraft window, especially if you aren't using Lambda or Forge with Future.
-Run the script in debug mode 'python jesus.py -d' or 'python jesus.py --debug' to see the title of your active window.
+If the script isn't working, the most likely issue is the title of your Minecraft window, especially if you aren't using Lambda or Forge with Future.
+Run the script in debug mode: 'python jesus.py -d' or 'python jesus.py --debug', to see the title of your active window.
 Then you can change the if statement logic in the "isFocused" function to match your Minecraft window title.
