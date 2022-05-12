@@ -19,44 +19,82 @@
 import os
 from time import sleep
 if os.name != 'nt':
-    print('Sorry, the solution used to generate keyboard events for this bypass only works on Windows.\nConsider researching an alternate solution for generating low-latency keypresses on Linux/Mac.')
+    print(' Sorry, the solution used to generate keyboard events for this bypass only works on Windows.')
+    print(' Consider researching an alternate solution for generating low-latency keypresses on Linux/Mac.')
     raise SystemExit(1)
 try:
     import pygetwindow as gw
 except ImportError:
     try:
-        import subprocess
-        subprocess.call(['pip3','install','pygetwindow'])
-        os.system('python jesus.py')
+        cont = input(' This script relies on the module "pygetwindow" to function. Would you like to install it now?  [Y/N] >')
+        if cont == 'y':
+            import subprocess
+            from site import getusersitepackages
+            from sys import path
+            subprocess.call(['python','-m','pip','install','pygetwindow'])
+            user_site = getusersitepackages()
+            if user_site not in path:
+                path.append(user_site)
+            import pygetwindow as gw
+        else:
+            print(f' Could not import pygetwindow module. Exiting..')
+            sleep(4.20)
+            raise SystemExit(1)
     except KeyboardInterrupt:
         raise SystemExit(1)
     except Exception as err:
-        print(f'Could not import pygetwindow module.\nError: {err}\nExiting..')
+        print(f' Could not import pygetwindow module.\nError: {err}\nExiting..')
+        sleep(4.20)
         raise SystemExit(1)
 try:
     import keyboard
 except ImportError:
     try:
-        import subprocess
-        subprocess.call(['pip3','install','keyboard'])
-        os.system('python jesus.py')
+        cont = input(' This script relies on the module "keyboard" to function. Would you like to install it now?  [Y/N] >')
+        if cont.lower() == 'y':
+            import subprocess
+            from site import getusersitepackages
+            from sys import path
+            subprocess.call(['python','-m','pip','install','keyboard'])
+            user_site = getusersitepackages()
+            if user_site not in path:
+                path.append(user_site)
+            import keyboard
+        else:
+            print(f' Could not import Keyboard module. Exiting..')
+            sleep(4.20)
+            raise SystemExit(1)
     except KeyboardInterrupt:
         raise SystemExit(1)
     except Exception as err:
-        print(f'Could not import Keyboard module. \nError: {err}\nExiting..')
+        print(f' Could not import Keyboard module. \nError: {err}\nExiting..')
+        sleep(4.20)
         raise SystemExit(1)
 try:
     import schedule
 except ImportError:
     try:
-        import subprocess
-        subprocess.call(['pip3','install','schedule'])
-        os.system('python jesus.py')
+        cont = input(' This script relies on the module "schedule" to function. Would you like to install it now?  [Y/N] >')
+        if cont.lower() == 'y':
+            import subprocess
+            from site import getusersitepackages
+            from sys import path
+            subprocess.call(['pip3','install','schedule'])
+            user_site = getusersitepackages()
+            if user_site not in path:
+                path.append(user_site)
+            import schedule
+        else:
+            print(f' Could not import schedule module. Exiting..')
+            sleep(4.20)
+            raise SystemExit(1)           
     except KeyboardInterrupt:
         raise SystemExit(1)
     except Exception as err:
-        print(f'Could not import schedule module.\nError: {err}\nExiting..')
+        print(f' Could not import schedule module.\nError: {err}\nExiting..')
+        sleep(4.20)
         raise SystemExit(1)
+
 from sys import argv as args
 import ctypes
 from ctypes import wintypes
@@ -79,11 +117,12 @@ INPUT_HARDWARE = 2
 MAPVK_VK_TO_VSC = 0
 
 VKEY_K = 0x4B # This is our virtual key variable, it is currently set to 'K'. Change this if you use a different Jesus toggle hotkey other than 'K'.
+# You can reference the hexcodes at the URL below to choose the best hotkey for you.
 # Microsoft virtual key hexcodes: https://docs.microsoft.com/en-us/windows/win32/inputdev/virtual-key-codes?redirectedfrom=MSDN
 
 wintypes.ULONG_PTR = wintypes.WPARAM
 
-class MOUSEINPUT(ctypes.Structure): # Unused for our purposes
+class MOUSEINPUT(ctypes.Structure): # Unused for our purposes (but removing breaks the code)
     _fields_ = (("dx",          wintypes.LONG),
                 ("dy",          wintypes.LONG),
                 ("mouseData",   wintypes.DWORD),
@@ -105,7 +144,7 @@ class KEYBDINPUT(ctypes.Structure): # Class for generating virtual keyboard even
         if not self.dwFlags & KEYEVENTF_UNICODE:
             self.wScan = user32.MapVirtualKeyExW(self.wVk, MAPVK_VK_TO_VSC, 0)
 
-class HARDWAREINPUT(ctypes.Structure): # Unused for our purposes
+class HARDWAREINPUT(ctypes.Structure): # Unused for our purposes (but removing breaks the code)
     _fields_ = (("uMsg",    wintypes.DWORD),
                 ("wParamL", wintypes.WORD),
                 ("wParamH", wintypes.WORD))
@@ -113,8 +152,8 @@ class HARDWAREINPUT(ctypes.Structure): # Unused for our purposes
 class INPUT(ctypes.Structure): # Input Class
     class _INPUT(ctypes.Union):
         _fields_ = (("ki", KEYBDINPUT),
-                    ("mi", MOUSEINPUT),
-                    ("hi", HARDWAREINPUT))
+                    ("mi", MOUSEINPUT), # ----->v
+                    ("hi", HARDWAREINPUT))      # Unused for our purposes, but removing causes errors.
     _anonymous_ = ("_input",)
     _fields_ = (("type",   wintypes.DWORD),
                 ("_input", _INPUT))
@@ -152,7 +191,8 @@ def ReleaseKey(hexKeyCode):
 os.system('cls')
 
 switch = False
-isPaused = False
+typing = False
+is_paused = False
 debug = False
 
 # Parse args for optional debug mode.
@@ -161,37 +201,34 @@ for arg in args:
         debug = True
 
 
-def stfu(): # Enables "do this if that else pass" if statements on one line, since 'pass' won't work in these single-line statements for some reason but we also can't eschew 'else' so...
-    pass
-def die(code):
+def die(code: int) -> None:
     raise SystemExit(code)
 
 
-def isFocused():
-    try:            # If using a different set-up, your window title may differ from these 2!
+def isFocused() -> bool:
+    try:         # If using a different set-up, your window title may differ from these 2!
         if gw.getActiveWindow().title == 'Minecraft 1.12.2' or 'Lambda' in gw.getActiveWindow().title:
-            return True # If needed, change the above line to match your MC window title so that this function will return true when active.
+            return True
         else:
             return False
-    except AttributeError:
-        stfu() # Ignore harmless AttributeError from switching active windows.
+    except AttributeError: # Ignore harmless AttributeError caused by switching active windows.
         return False
 
 
-def jesus():
+def jesus() -> None:
     global switch
     try:
-        print(gw.getActiveWindow().title) if debug else stfu() # Use debug mode to troubleshoot by checking that your window title matches the following logic.
+        if debug: print(f' {gw.getActiveWindow().title}')
 
-        if not switch and not isPaused:
-            if isFocused(): 
+        if not switch and not is_paused:
+            if isFocused():
                 PressKey(VKEY_K)
                 sleep(0.003)
                 ReleaseKey(VKEY_K)
             else:
                 return
-    except AttributeError:
-        stfu()            # Ignore harmless AttributeError from switching active windows.
+    except AttributeError: # Ignore harmless AttributeError caused by switching active windows.
+        pass           
     except Exception as err:
         print(f'Errored: {err}.') # Report unhandled errors.
         try:
@@ -201,36 +238,49 @@ def jesus():
             die(1)
 
 
-schedule.every(0.32).seconds.do(jesus) # Main interval for our toggle speed. You may need or wish to adjust this number slightly or depending on your Client.
-print('Running EntityJesus Bypass..')
+# Main interval for our toggle speed. You may need or wish to adjust this number slightly or depending on your Client.
+schedule.every(0.32).seconds.do(jesus) 
+print(' Running EntityJesus Bypass..')
 
 try:
     while True:
         if isFocused():
 
             # Prevent the script from continuously spamming when we open chat menus or client menus.
-            if (keyboard.is_pressed('t') or keyboard.is_pressed('/') or keyboard.is_pressed(';') or keyboard.is_pressed('y') or keyboard.is_pressed('right_shift')) and not switch: 
-                
+            if (keyboard.is_pressed('t') or keyboard.is_pressed('/') or keyboard.is_pressed(';') or keyboard.is_pressed('right_shift')) and not switch: 
+
                 # This way we can still type. Hotkey macro is disabled while switch boolean is True.
                 switch = True 
-                print('Paused Bypass.') if not isPaused else stfu()
+                typing = True
+                if not is_paused: print(' Paused Bypass.')
                 sleep(.420) # Brief sleep to prevent script from racing between paused/resumed.
 
+            # We don't want pressing 'y' while typing in chat to reactivate the spamming.
+            elif keyboard.is_pressed('y') and not switch and not typing:
+                switch = True
+                if not is_paused: print(' Paused Bypass.')
+                sleep(.420)
+
             # Resume auto-toggle once we exit from chat or client-menu. Right-shift is missing here because it doesn't also close the client menu, at least for Future.
-            elif (keyboard.is_pressed('enter') or keyboard.is_pressed('escape') or keyboard.is_pressed('y')) and switch: 
-                print('Resumed Bypass.') if not isPaused else stfu()
+            elif (keyboard.is_pressed('enter') or keyboard.is_pressed('escape')) and switch and typing: 
+                if not is_paused: print(' Resumed Bypass.')
+                typing = False
+                switch = False
+                sleep(.420)
+            elif keyboard.is_pressed('y') and switch and not typing:
+                if not is_paused: print(' Resumed Bypass.')
                 switch = False
                 sleep(.420)
 
-            elif keyboard.is_pressed('grave'): # Manual pause-mode toggle. You can change the pause hotkey here, default 'grave' is the '~' key.
-                if isPaused:
-                    isPaused = False
-                    print('Resumed Bypass.')
+            # Manual pause-mode toggle. You can change the pause hotkey here, default 'grave' is the '~' key.
+            elif keyboard.is_pressed('grave'): 
+                if is_paused:
+                    is_paused = False
+                    print(' Resumed Bypass.')
                     sleep(.420)
-
-                elif not isPaused:
-                    isPaused = True
-                    print('Paused Bypass.')
+                elif not is_paused:
+                    is_paused = True
+                    print(' Paused Bypass.')
                     sleep(.420)
 
         schedule.run_pending()
