@@ -1,6 +1,15 @@
 # jesus-bypass
 ## An automation script to bypass stricter EntityJesus behaviors on the anarchy Minecraft server 2b2t.
 
+## OUTDATED AS OF 2023.
+As of 2023 this script no longer serves any purpose and will remain archived.<br>
+Future updated their Jesus module, and the strict mode works fine these days. If you have that, use it.<br>
+Additionally, the release of Lambda 3.3.0 saw a Jesus rewrite which disabled EntityJesus altogether.<br>
+If you need a free solution for EntityJesus, my [Lambda](https://github.com/lambda-client/lambda) plugin [Oasis](https://github.com/0xTas/oasis) has an EntityJesus module on-par with Future's.
+
+
+### History
+
 On April 4th or 5th, 2022, Hausemaster patched various forms of movement including BoatSpeed and EntityJesus. 
 EntitySpeed for horses still works fine on many clients, but most forms of EntityJesus became borderline unusable, causing insane rubberbanding and disconnects.
 
